@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Edit Event') }}
+            {{ __('Add Event') }}
         </h2>
     </x-slot>
     <div class="py-12">
@@ -19,44 +19,45 @@
                 @endif
                 <div class="max-w-xl">
                     <section>
-                        <form method="post" action="{{ route('organizer.updateEvent', $event->id) }}" class="mt-6 space-y-6">
+                        <form method="post" action="{{ route('organizer.addEvent') }}" class="mt-6 space-y-6">
                             @csrf
-                            @method('PUT')
                             <div>
-                                <x-input-label for="title" :value="__('Event title')" />
-                                <x-text-input id="title" name="title" type="text" class="mt-1 block w-full" autocomplete="off" value="{{ $event->title }}" />
+                                <x-input-label for="title" :value="__('Event Name')" />
+                                <x-text-input id="title" name="title" type="text" class="mt-1 block w-full" autocomplete="off" />
                             </div>
                             <div>
                                 <x-input-label for="date" :value="__('Event Date')" />
-                                <x-text-input id="date" name="date" type="date" class="mt-1 block w-full" autocomplete="off" value="{{ $event->date }}" />
+                                <x-text-input id="date" name="date" type="date" class="mt-1 block w-full" autocomplete="off" />
                             </div>
                             <div>
                                 <x-input-label for="location" :value="__('Event Location')" />
-                                <x-text-input id="location" name="location" type="text" class="mt-1 block w-full" autocomplete="off" value="{{ $event->location }}" />
+                                <x-text-input id="location" name="location" type="text" class="mt-1 block w-full" autocomplete="off" />
                             </div>
                             <div>
                                 <x-input-label for="description" :value="__('Event Description')" />
-                                <textarea id="description" name="description" class="mt-1 block w-full" rows="4" autocomplete="off">{{ $event->description }}</textarea>
+                                <textarea id="description" name="description" class="mt-1 block w-full" rows="4" autocomplete="off"></textarea>
                             </div>
                             <div>
                                 <x-input-label for="category" :value="__('Event Category')" />
-                                <select id="category" name="category" class="mt-1 block w-full" autocomplete="off" >
+                                <select id="category" name="category" class="mt-1 block w-full" autocomplete="off">
                                     @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" @if($event->category && $event->category->id === $category->id) selected @endif>{{ $category->name }}</option>
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <x-input-label for="acceptation" :value="__('Type acceptation')" />
-                            <select id="acceptation" name="acceptation" class="mt-1 block w-full" autocomplete="off">
-                                <option value="automatique" @if($event->acceptation == 'automatique') selected @endif>Automatique</option>
-                                <option value="manuel" @if($event->acceptation == 'manuel') selected @endif>Manuel</option>
-                            </select>
+                            <div>
+                                <x-input-label for="acceptation" :value="__('Type acceptation')" />
+                                <select id="acceptation" name="acceptation" class="mt-1 block w-full" autocomplete="off">
+                                    <option value="automatique">Automatique</option>
+                                    <option value="manuel">Manuel</option>
+                                </select>
+                            </div>
                             <div>
                                 <x-input-label for="place_number" :value="__('Available Places')" />
-                                <x-text-input id="place_number" name="place_number" type="number" class="mt-1 block w-full" autocomplete="off" value="{{ $event->place_number }}"  />
+                                <x-text-input id="place_number" name="place_number" type="number" class="mt-1 block w-full" autocomplete="off" />
                             </div>
                             <div class="flex items-center gap-4">
-                                <x-primary-button>{{ __('Update Event') }}</x-primary-button>
+                                <x-primary-button>{{ __('Create Event') }}</x-primary-button>
                             </div>
                         </form>
                     </section>
@@ -65,3 +66,4 @@
         </div>
     </div>
 </x-app-layout>
+

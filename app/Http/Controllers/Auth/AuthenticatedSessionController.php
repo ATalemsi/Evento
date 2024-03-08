@@ -29,7 +29,13 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        if (Auth::user()->role === 'user') {
+            return redirect()->route('events.index');
+        } elseif (Auth::user()->role === 'organisateur') {
+            return redirect()->route('organizer.eventStatistics');
+        } else{
+            return redirect()->route('admin.platformStatistics');
+        }
     }
 
     /**
@@ -43,6 +49,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/index');
     }
 }

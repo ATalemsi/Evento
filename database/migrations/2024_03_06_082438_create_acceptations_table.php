@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('event_id')->references('id')->on('events');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->string('stat')->default('Automatique');
+            $table->enum('status', ['pending', 'accepted'])->default('pending');
             $table->timestamps();
         });
     }

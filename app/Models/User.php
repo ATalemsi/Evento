@@ -48,4 +48,21 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reservation::class);
     }
+    public function ban()
+    {
+        $this->banned = true;
+        $this->save();
+    }
+
+    public function unban()
+    {
+        $this->banned = false;
+        $this->save();
+    }
+
+    public function isBanned()
+    {
+        return $this->banned;
+    }
+
 }

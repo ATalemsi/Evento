@@ -1,20 +1,48 @@
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-    <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                    </a>
+
+                        <a href="#" class="block px-3 py-2 rounded-md text-2xl font-bold text-gray-200 hover:text-gray-900 ">Event<span class="text-blue-700">To</span></a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    @auth
+                        @if(auth()->user()->role == 'user')
+                            <x-nav-link :href="route('events.index')" :active="request()->routeIs('events.index')">
+                                {{ __('Events') }}
+                            </x-nav-link>
+                        @elseif(auth()->user()->role == 'organisateur')
+                            <x-nav-link :href="route('organizer.createEvent')" :active="request()->routeIs('organizer.createEvent')">
+                                {{ __('Create Event') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('organizer.eventStatistics')" :active="request()->routeIs('organizer.eventStatistics')">
+                                {{ __('Events Statistics') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('organizer.acceptation')" :active="request()->routeIs('organizer.acceptation')">
+                                {{ __('Validation reserve') }}
+                            </x-nav-link>
+                        @elseif(auth()->user()->role == 'admin')
+                            <x-nav-link :href="route('admin.platformStatistics')" :active="request()->routeIs('admin.platformStatistics')">
+                                {{ __('Statistics') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.restrectionUser')" :active="request()->routeIs('admin.restrectionUser')">
+                                {{ __('User Restriction') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.createCategory')" :active="request()->routeIs('admin.createCategory')">
+                                {{ __('Create Category') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.categories')" :active="request()->routeIs('admin.categories')">
+                                {{ __('Category') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.events')" :active="request()->routeIs('admin.events')">
+                                {{ __('Events') }}
+                            </x-nav-link>
+                        @endif
+                    @endauth
                 </div>
             </div>
 
@@ -23,7 +51,7 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+                            <div>{{ Auth::user()->name }}/{{Auth::user()->role}}</div>
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
