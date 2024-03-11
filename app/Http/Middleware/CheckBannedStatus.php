@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserMiddleware
+class CheckBannedStatus
 {
     /**
      * Handle an incoming request.
@@ -15,8 +15,9 @@ class UserMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->role !== 'user') {
-            return redirect()->back()->with('error', 'You do not have permission to access this page.');
+        if (auth()->check() && auth()->user()->banned) {
+            // If banned, restrict access
+            return redirect()->back()->with('error', 'You are banned and cannot perform this action.');
         }
         return $next($request);
     }

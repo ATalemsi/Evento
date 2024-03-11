@@ -15,6 +15,9 @@ class OrganizedMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (auth()->check() && auth()->user()->role !== 'organisateur') {
+            return redirect()->back()->with('error', 'You do not have permission to access this page.');
+        }
         return $next($request);
     }
 }

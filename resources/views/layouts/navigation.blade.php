@@ -95,9 +95,39 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            @auth
+                @if(auth()->user()->role == 'user')
+                    <x-responsive-nav-link :href="route('events.index')" :active="request()->routeIs('events.index')">
+                        {{ __('Events') }}
+                    </x-responsive-nav-link>
+                @elseif(auth()->user()->role == 'organisateur')
+                    <x-responsive-nav-link :href="route('organizer.createEvent')" :active="request()->routeIs('organizer.createEvent')">
+                        {{ __('Create Event') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('organizer.eventStatistics')" :active="request()->routeIs('organizer.eventStatistics')">
+                        {{ __('Events Statistics') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('organizer.acceptation')" :active="request()->routeIs('organizer.acceptation')">
+                        {{ __('Validation reserve') }}
+                    </x-responsive-nav-link>
+                @elseif(auth()->user()->role == 'admin')
+                    <x-responsive-nav-link :href="route('admin.platformStatistics')" :active="request()->routeIs('admin.platformStatistics')">
+                        {{ __('Statistics') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.restrectionUser')" :active="request()->routeIs('admin.restrectionUser')">
+                        {{ __('User Restriction') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.createCategory')" :active="request()->routeIs('admin.createCategory')">
+                        {{ __('Create Category') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.categories')" :active="request()->routeIs('admin.categories')">
+                        {{ __('Category') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.events')" :active="request()->routeIs('admin.events')">
+                        {{ __('Events') }}
+                    </x-responsive-nav-link>
+                @endif
+            @endauth
         </div>
 
         <!-- Responsive Settings Options -->

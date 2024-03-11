@@ -34,15 +34,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','user'])->group(function () {
 Route::get('users/evenements', [EventController::class, 'index'])->name('events.index');
-Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
-Route::get('/filter', [EventController::class, 'filterByCategory'])->name('events.filter');
-Route::get('/search', [EventController::class, 'searchByTitle'])->name('events.searchByTitle');
-
-
-Route::post('/events/reserve', [UserController::class, 'reserve'])->name('events.reserve');
-Route::get('/events/reservation/ticket/{event}', [UserController::class, 'generateTicket'])->name('events.generateTicket');
+Route::get('/events/{event}', [EventController::class, 'show'])->middleware(['check.banned'])->name('events.show');
+Route::get('/filter', [EventController::class, 'filterByCategory'])->middleware(['check.banned'])->name('events.filter');
+Route::get('/search', [EventController::class, 'searchByTitle'])->middleware(['check.banned'])->name('events.searchByTitle');
+Route::post('/events/reserve', [UserController::class, 'reserve'])->middleware(['check.banned'])->name('events.reserve');
+Route::get('/events/reservation/ticket/{event}', [UserController::class, 'generateTicket'])->middleware(['check.banned'])->name('events.generateTicket');
 });
 // Organizer routes
 Route::middleware(['auth'])->group(function () {
@@ -58,11 +56,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/event/acceuil', [OrganizerController::class, 'eventStatistics'])->name('organizer.eventStatistics');
     Route::get('/event/eventacceptation', [OrganizerController::class, 'acceptation'])->name('organizer.acceptation');
     Route::post('/organizer/events/acceptation/{id}', [OrganizerController::class, 'reservation_valide'])->name('organizer.valide');
+    Route::post('/organizer/events/acceptationall', [OrganizerController::class, 'accepted_all'])->name('organizer.valideall');
+
 
 });
 
 // Admin routes
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','admin'])->group(function () {
     Route::get('/admin/users', [AdminController::class, 'restrectionUser'])->name('admin.restrectionUser');
     Route::post('/admin/users/{id}/ban', [AdminController::class, 'banUser'])->name('admin.users.ban');
 

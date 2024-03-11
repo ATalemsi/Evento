@@ -19,7 +19,6 @@
                 @endif
                 <div class="max-w-xl">
                     <section>
-
                         <form method="post" action="{{ route('admin.addCategory') }}" class="mt-6 space-y-6">
                             @csrf
                             <div>

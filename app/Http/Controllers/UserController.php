@@ -55,8 +55,8 @@ class UserController extends Controller
     {
         $reservation = Reservation::where('event_id', $eventId)->firstOrFail();
         $event = $reservation->event;
-        $user = $reservation->user;
-        return view('users.ticket', compact('event', 'reservation', 'user'));
+
+        return view('users.ticket', compact('event', 'reservation'));
 
     }
 }

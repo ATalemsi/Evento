@@ -88,7 +88,7 @@ class AdminController extends Controller
     {
         $event = Event::findOrFail($id);
         $event->validate();
-        return redirect()->back()->with('success', 'User has been banned.');
+        return redirect()->back()->with('success', 'Event Was Valid.');
     }
     public function events()
     {

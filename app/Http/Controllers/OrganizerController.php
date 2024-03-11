@@ -51,7 +51,7 @@ class OrganizerController extends Controller
     }
     public function updateEvent(Request $request, $id)
     {
-        // Validate the request data
+
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'date' => 'required|date|after_or_equal:today',
@@ -62,10 +62,10 @@ class OrganizerController extends Controller
             'place_number' => 'required|integer|min:1',
         ]);
 
-        // Find the event by ID
+
         $event = Event::findOrFail($id);
 
-        // Update the event data
+
         $event->update([
             'title' => $validatedData['title'],
             'date' => $validatedData['date'],
@@ -89,33 +89,18 @@ class OrganizerController extends Controller
     }
     public function eventStatistics()
     {
-        $events = Event::all();
-        // Retrieve the authenticated user
+        $events = Event::where('organizer_id',auth()->user()->id)->get();
         $user =auth()->user();
-
-
-        // Ensure that the authenticated user is an organizer
-        if ($user->role !== 'organisateur') {
-            // Handle unauthorized access
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
-
-        // Retrieve all events associated with the organizer
         $organizerEvents = Event::where('organizer_id', $user->id)->get();
-
-        // Initialize an array to store event statistics
         $eventStatistics = [];
-
-        // Loop through each event
         foreach ($organizerEvents as $event) {
-            // Calculate statistics for the event
+
             $reservationCount = $event->reservations()->where('event_id', $event->id)->count();
-            // Calculate the number of reserved and unreserved places
             $totalPlaces = $event->place_number;
             $reservedPlaces = $reservationCount;
             $unreservedPlaces = $totalPlaces ;
 
-            // Add event statistics to the array
+
             $eventStatistics[] = [
                 'event_name' => $event->title,
                 'reservation_count' => $reservationCount,
@@ -123,31 +108,35 @@ class OrganizerController extends Controller
                 'unreserved_places' => $unreservedPlaces,
             ];
         }
-        // Return the event statistics compacted for the view
+
         return view('events.acceuil', compact('eventStatistics','events'));
     }
     public function acceptation()
     {
-        // Get all reservations that are pending validation
-        $pendingReservations = Acceptation::where('status', 'pending')->get();
+        $organizerId = auth()->id();
 
-        // Prepare an array to store event details along with reserved user and status
+
+        $pendingReservations = Acceptation::whereHas('event', function ($query) use ($organizerId) {
+            $query->where('organizer_id', $organizerId);
+        })->where('status', 'pending')->get();
+
+
         $eventsWithReservations = [];
 
-        // Iterate through each pending reservation
+
         foreach ($pendingReservations as $reservation) {
-            // Get the event associated with the reservation
+
             $event = $reservation->event;
 
-            // Get the user who made the reservation
+
             $user = $reservation->user;
 
-            // Get the reservation status
+
             $status = $reservation->status;
 
             $acceptationId = $reservation->id;
 
-            // Add event, reserved user, and status details to the array
+
             $eventsWithReservations[] = [
                 'event' => $event,
                 'user' => $user,
@@ -157,7 +146,7 @@ class OrganizerController extends Controller
             ];
         }
 
-        // Pass the array to the view
+
         return view('events.eventacceptation', compact('eventsWithReservations'));
 
     }
@@ -168,23 +157,28 @@ class OrganizerController extends Controller
             'event_id'=> 'required|exists:events,id'
         ]);
 
-        // Find the acceptation by ID
+
         $acceptation = Acceptation::findOrFail($request->acceptation_id);
         $event = Event::find($request->event_id);
 
-        // Update the status of acceptation to "accepted"
+
         $acceptation->update(['status' => 'accepted']);
 
-        // Create a new reservation based on the accepted acceptation
+
         Reservation::create([
             'event_id' => $acceptation->event_id,
             'user_id' => $acceptation->user_id,
         ]);
         $event->decrement('place_number');
 
-        // Redirect back with a success message
+
         return redirect()->back()->with('success', 'Reservation accepted successfully.');
 
+    }
+    public function accepted_all(){
+        $acceptation = Acceptation::all();
+        $acceptation->update(['status' => 'accepted']);
+        return redirect()->back()->with('success', 'Reservation accepted successfully.');
     }
 
 }

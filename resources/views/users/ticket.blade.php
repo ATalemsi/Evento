@@ -25,9 +25,9 @@
                             </div>
                             <div class="mb-6">
                                 <p class="text-xl font-bold mb-2">Reserved By:</p>
-                                <p class="text-lg">{{ $user->name }}</p>
-                                <p class="text-lg">{{ $user->email }}</p>
-                                <p class="text-lg">{{ $user->phone }}</p>
+                                <p class="text-lg">{{ auth()->user()->name }}</p>
+                                <p class="text-lg">{{ auth()->user()->email }}</p>
+
                             </div>
                             <div class="mb-6">
                                 <p class="text-xl font-bold mb-2">Reservation Date:</p>

@@ -46,6 +46,9 @@
                                     <p class="block font-sans text-base antialiased font-light leading-relaxed text-inherit">
                                         {{ $event->description }}
                                     </p>
+                                    <p class="block font-bold text-base antialiased  leading-relaxed text-inherit">
+                                        {{ $event->category->name }}
+                                    </p>
                                 </div>
                                 <div class="p-6 pt-0">
                                     @if(auth()->user()->banned)

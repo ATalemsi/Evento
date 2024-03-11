@@ -15,3 +15,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+document.addEventListener('DOMContentLoaded', function() {
+    const closeButton = document.querySelector('.close-button-error');
+    const flashMessage = document.getElementById('flash-message-error');
+
+    if (closeButton && flashMessage) {
+        closeButton.addEventListener('click', function() {
+            flashMessage.style.display = 'none';
+        });
+    }
+});

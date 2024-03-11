@@ -8,6 +8,15 @@
         <div class="mx-auto max-w-7xl">
             <div class="px-4 sm:px-6 lg:px-8">
                 <div class="sm:flex sm:items-center">
+                    <div>
+                        <form  action="{{ route('organizer.valideall' }}" method="POST">
+                            @csrf
+
+                            <button type="submit"  class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">
+                            Accept
+                            </button>
+                        </form>
+                    </div>
                     <div class="sm:flex-auto">
                         <h1 class="text-xl font-semibold text-gray-900">Event</h1>
                         <p class="mt-2 text-sm text-gray-700">A list of all reservation that not valid yet.</p>
